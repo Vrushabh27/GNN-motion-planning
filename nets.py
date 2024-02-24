@@ -351,7 +351,7 @@ from torch_sparse import SparseTensor
 
 from torch_geometric.nn import LEConv
 from torch_geometric.utils import softmax
-from torch_geometric.nn.pool.topk_pool import topk
+from torch_geometric.nn.pool.topk_pool import TopKPooling
 from torch_geometric.utils import add_remaining_self_loops
 
 
@@ -440,7 +440,9 @@ class ASAPooling(torch.nn.Module):
 
         # Cluster selection.
         fitness = self.gnn_score(x, edge_index).sigmoid().view(-1)
-        perm = topk(fitness, self.ratio, batch)
+        # perm = topk(fitness, self.ratio, batch)
+        perm = TopKPooling(fitness, self.ratio, batch)
+
         x = x[perm] * fitness[perm].view(-1, 1)
         batch = batch[perm]
 

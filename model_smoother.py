@@ -14,6 +14,15 @@ from torch_geometric.nn import knn_graph, GraphConv
 from nets import GATConv, EdgePooling, ASAPooling, SAModule, FPModule, MLP
 from torch import nn
 from torch_sparse import coalesce
+from torch_geometric.typing import PairTensor
+from torch_geometric.typing import (
+    Adj,
+    OptTensor,
+    PairOptTensor,
+    PairTensor,
+    SparseTensor,
+    torch_sparse,
+) 
 import math
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

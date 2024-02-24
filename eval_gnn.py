@@ -11,7 +11,7 @@ from smoother import model_smooth, proposed_path_smoother, joint_smoother, inter
 from str2name import str2name
 from environment.timer import Timer
 
-loop = 5
+loop = 6
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -148,6 +148,7 @@ def eval_gnn(str, seed, env, indexes, model=None, model_s=None, use_tqdm=False, 
 
 
 def create_data(free, collided, env, k):
+    # print(np.shape(free))
     data = Data(goal=torch.FloatTensor(env.goal_state))
     data.v = torch.cat((torch.FloatTensor(np.array(free)),
                         torch.FloatTensor(np.array(collided))), dim=0)
@@ -281,7 +282,7 @@ if __name__ == '__main__':
     import pybullet as p
     from time import sleep
 
-    env = SnakeEnv(GUI=False)
+    env = SnakeEnv(GUI=True)
     env.init_new_problem(2000)
     # for _ in range(100):
     #     env.set_config(env.init_state)
