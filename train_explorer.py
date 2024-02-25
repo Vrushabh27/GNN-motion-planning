@@ -7,6 +7,7 @@ from tensorboardX import SummaryWriter
 import pickle
 from time import time
 from algorithm.dijkstra import dijkstra
+from copy import deepcopy
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -93,8 +94,19 @@ def policy_data(edge_cost, dist, prev, policy, start, end, step):
     return next_edge, next_edge_idx, frontier
 
 
-def train_explorer(epoch, data_path, model, model_path, env, 
+def train_explorer(epoch, 
                    use_obstacle=True, use_heuristic=True, iter=20, loop=10):
+    
+    from model import EncoderProcessDecoder
+    from environment import MazeEnv, KukaEnv, SnakeEnv, UR5Env, Kuka2Env
+
+    # Maze env
+    model = EncoderProcessDecoder(workspace_size=3, config_size=7, embed_size=32, obs_size=2).to(device)
+    model_path = 'data/weights/weights_snake.pt'    
+
+    data_path = 'data/pkl/snake_prm_3000.pkl'  
+
+    env = SnakeEnv(map_file='maze_files/snakes_15_2_3000.npz')
 
     model.use_obstacle = use_obstacle
     model.use_heuristic = use_heuristic
@@ -209,3 +221,8 @@ def train_explorer(epoch, data_path, model, model_path, env,
 
     torch.save(model.state_dict(), model_path)
     writer.close()
+
+
+
+if __name__ == '__main__':
+    train_explorer(epoch = 10)
